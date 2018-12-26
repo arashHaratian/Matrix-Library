@@ -10,40 +10,65 @@ using namespace std;
 //------------------------------Public Matrix(row,column) Constructor----------------
 Matrix::Matrix (int row, int column) : matrix_( vector<vector<double >>(row,vector<double >(column)) )
 {
-    this->row_=row;
+    try {
+        if (row <= 0)
+            throw bad_alloc();
+    }
+    catch(bad_alloc& row)
+    {
+        cout<<"\nERROR! Your matrix 'row' must be bigger than 0.\n";
+        throw ;
+    }
+    try {
+        if (column  <= 0)
+            throw bad_alloc();
+    }
+    catch(bad_alloc& column)
+    {
+        cout<<"\nERROR! Your matrix 'column' must be bigger than 0.\n";
+        throw ;
+    }
     this->column_=column;
+    this->row_=row;
 }
 //------------------------------Public Matrix(File) Constructor------------
-Matrix::Matrix (string address)
+Matrix::Matrix (string address, char delim)
 {
-    this->row_ = this->column_ = 0;
-    size_t thisDelim = 0;
     ifstream matrixfile;
     matrixfile.open (address);
-    if(matrixfile.is_open())
+    try {
+        if ( !matrixfile.is_open() )
+            throw runtime_error("\nCould not open file.\n");
+    }
+    catch (exception & file)
     {
-        string line = "";
-        while (getline(matrixfile, line) && line != "")
+        cout << "\nYour address or txt file name is wrong.\n";
+        throw ;
+    }
+
+    this->row_ = this->column_ = 0;
+    size_t thisDelim = 0;
+    string line = "";
+    while (getline(matrixfile, line) && line != "")
+    {
+        while (line.find(delim, thisDelim + 1) && row_ == 0)
         {
-            while (line.find(',', thisDelim + 1) && row_ == 0)
+            thisDelim = line.find(delim, thisDelim + 1);
+            if (thisDelim == string::npos)
             {
-                thisDelim = line.find(',', thisDelim + 1);
-                if (thisDelim == string::npos)
-                {
-                    column_++;
-                    break;
-                }
                 column_++;
+                break;
             }
-            row_++;
+            column_++;
         }
+        row_++;
     }
     this->matrix_ = vector<vector<double > > (row_,vector<double >(column_));
-    this->openFile_(address);
+    this->openFile_(address, delim);
     matrixfile.close();
 }
 //------------------------------Overloading CIN---------------------------------
-istream& operator>>(istream &in, Matrix &matrix1)
+istream& operator >> (istream &in, Matrix &matrix1)
 {
     for(int it = 0 ; it < matrix1.row_ ; it++)
     {
@@ -52,51 +77,82 @@ istream& operator>>(istream &in, Matrix &matrix1)
             in >> matrix1.matrix_.at(it).at(innerIt);
     }
 }
-//------------------------------Output the this->matrix---------------------------
-void Matrix::output()
+//------------------------------show the this->matrix WITH delim---------------------------
+void Matrix::show(char delim)
 {
     for (int it = 0; it < this->row_; it++)
     {
         for(int innerIt = 0; innerIt < this->column_; innerIt++)
-            cout << this->matrix_.at(it).at(innerIt) << '\t';
+        {
+            if (innerIt == this->column_ -1)
+                cout << this->matrix_.at(it).at(innerIt);
+            else
+                cout << this->matrix_.at(it).at(innerIt) << delim;
+        }
+        cout << '\n';
+    }
+}
+//------------------------------show the this->matrix WITHOUT delim---------------------------
+void Matrix::show()
+{
+    for (int it = 0; it < this->row_; it++)
+    {
+        for(int innerIt = 0; innerIt < this->column_; innerIt++)
+        {
+            if (innerIt == this->column_ -1)
+                cout << this->matrix_.at(it).at(innerIt);
+            else
+                cout << this->matrix_.at(it).at(innerIt) << '\t';
+        }
         cout << '\n';
     }
 }
 //---------------------------Overloading SUM------------------------
 Matrix Matrix::operator+ (Matrix const &matrix)
 {
-    if(this->column_ == matrix.column_ && this->row_ == matrix.row_)
+    try
     {
-        Matrix totalMartix (this->row_, this->column_);
-        for (int it = 0; it < this->row_; it++)
-            for (int innerIt = 0; innerIt < this->column_; innerIt++)
-                totalMartix.matrix_.at(it).at(innerIt) = this->matrix_.at(it).at(innerIt) + matrix.matrix_.at(it).at(innerIt);
-        return totalMartix;
+        if (this->column_ != matrix.column_ || this->row_ != matrix.row_)
+            throw logic_error("\nSummation error: These matrices are not in a same shape.\n");
     }
-    else
-        cout << "ERROR!!!\n"
-                "THESE TWO MATRICES ARE NOT IN A SAME SHAPE.\n";
+    catch(exception & logicError)
+    {
+        cout<<"\nAn logic error thrown.\n";
+        throw ;
+    }
+
+    Matrix totalMartix (this->row_, this->column_);
+    for (int it = 0; it < this->row_; it++)
+        for (int innerIt = 0; innerIt < this->column_; innerIt++)
+            totalMartix.matrix_.at(it).at(innerIt) = this->matrix_.at(it).at(innerIt) + matrix.matrix_.at(it).at(innerIt);
+    return totalMartix;
+
 }
 //-------------------------Overloading Multiply With Another Matrix -----------------------
-Matrix Matrix::operator* (Matrix const &matrix)
+Matrix Matrix::operator * (Matrix const &matrix)
 {
-    if (this->column_ == matrix.row_)
+    try
     {
-        Matrix productMatrix(this->row_, matrix.column_);
-        for (int it = 0; it < this->row_; it++)
-            for(int firstInnerIt = 0; firstInnerIt < matrix.column_; firstInnerIt++)
-                for (int secondInnerIt = 0; secondInnerIt < this->column_; secondInnerIt++)
-                {
-                    productMatrix.matrix_.at(it).at(firstInnerIt) += this->matrix_.at(it).at(secondInnerIt) * matrix.matrix_.at(secondInnerIt).at(firstInnerIt);
-                }
-        return productMatrix;
+        if (this->column_ != matrix.row_)
+            throw logic_error("\nMultiplication error: Column of first matrix is not equal to row of second matrix.\n");
     }
-    else
-        cout <<"ERROR!!!\n"
-               "COLUMN OF FIRST MATRIX NOT EQUAL TO ROW OF SECOND.\n";
+    catch (exception & logicError)
+    {
+        cout << "\nAn logic error thrown.\n";
+        throw ;
+    }
+    Matrix productMatrix(this->row_, matrix.column_);
+    for (int it = 0; it < this->row_; it++)
+        for(int firstInnerIt = 0; firstInnerIt < matrix.column_; firstInnerIt++)
+            for (int secondInnerIt = 0; secondInnerIt < this->column_; secondInnerIt++)
+            {
+                productMatrix.matrix_.at(it).at(firstInnerIt) += this->matrix_.at(it).at(secondInnerIt) * matrix.matrix_.at(secondInnerIt).at(firstInnerIt);
+            }
+    return productMatrix;
+
 }
 //-------------------------Overloading Multiply With Number----------------------
-Matrix Matrix::operator*(int const coefficient)
+Matrix Matrix::operator * (int const coefficient)
 {
     Matrix productMatrix(this->row_, this->column_);
     for (int it = 0; it < this->row_; it++)
@@ -116,20 +172,25 @@ Matrix operator * (int const coefficient, Matrix const matrix)
 //----------------------------Overloading Minus----------------------
 Matrix Matrix::operator - (Matrix const matrix)
 {
-    if(this->row_ == matrix.row_ && this->column_ == matrix.column_)
+    try
     {
-        Matrix minusMatrix (this->row_, this->column_);
-        for (int it = 0; it < this->row_; it++)
-            for (int innerIt = 0; innerIt < this->column_; innerIt++)
-                minusMatrix.matrix_.at(it).at(innerIt) = this->matrix_.at(it).at(innerIt) - matrix.matrix_.at(it).at(innerIt);
-        return minusMatrix;
+        if (this->column_ != matrix.column_ || this->row_ != matrix.row_)
+            throw logic_error("\nSubtraction error: These matrices are not in a same shape.\n");
     }
-    else
-        cout << "ERROR!!!\n"
-                "THESE TWO MATRICES ARE NOT IN A SAME SHAPE.\n";
+    catch(exception & logicError)
+    {
+        cout<<"\nAn logic error thrown.\n";
+        throw ;
+    }
+    Matrix minusMatrix (this->row_, this->column_);
+    for (int it = 0; it < this->row_; it++)
+        for (int innerIt = 0; innerIt < this->column_; innerIt++)
+            minusMatrix.matrix_.at(it).at(innerIt) = this->matrix_.at(it).at(innerIt) - matrix.matrix_.at(it).at(innerIt);
+    return minusMatrix;
+
 }
 //----------------------------- overloading == -----------------------
-bool Matrix ::operator==(Matrix const matrix)
+bool Matrix ::operator == (Matrix const matrix)
 {
     if(this->row_ == matrix.row_ && this->column_ == matrix.column_)
     {
@@ -140,8 +201,7 @@ bool Matrix ::operator==(Matrix const matrix)
         return true;
     }
     else
-        cout << "ERROR!!!\n"
-                "THESE TWO MATRICES ARE NOT IN A SAME SHAPE.\n";
+        return false;
 }
 //----------------------------Transposing----------------------------
 Matrix Matrix::transpose()
@@ -193,59 +253,74 @@ double Matrix::determinant_ (int n)
 //-------------------Public determinant------------------------------------
 double Matrix::determinant()
 {
+    try
+    {
+        if (this->row_ != this->column_)
+            throw logic_error("\nDeterminants are only used for square matrices.\n");
+    }
+    catch(exception & logicError)
+    {
+        cout << "\nAn logic error thrown.\n";
+        throw ;
+    }
+
     return this->determinant_(this->row_);
 }
 //-----------------Elements Textfile To Matrix----------------------
-void Matrix::openFile_(string address)
+void Matrix::openFile_(string address, char delim)
 {
-    size_t previousDelim = -1;
-    size_t thisDelim = 0;
     ifstream elementFile (address);
-    if (elementFile.is_open())
+    try
     {
-        string line = "";
-        int it = 0;
-        while (getline (elementFile, line) && line != "")
+        if( !elementFile.is_open() )
         {
-            int innerIt = 0;
-            while (line.find (',', thisDelim + 1))
-            {
-                thisDelim = line.find(',', thisDelim + 1);
-                if (thisDelim == string::npos)
-                {
-                    thisDelim = line.find('\n');
-                    if (line [previousDelim + 1] == '-')
-                        this->matrix_.at(it).at(innerIt) = -stod (line.substr (previousDelim + 2, thisDelim));
-                    else
-                        this->matrix_.at(it).at(innerIt) = stod (line.substr (previousDelim + 1, thisDelim - 1));
-                    break;
-                }
-                if (line[previousDelim + 1] == '-')
-                {
-                    this->matrix_.at(it).at(innerIt) = -stod (line.substr (previousDelim + 2, thisDelim));
-                    innerIt++;
-                }
-                else
-                {
-                    this->matrix_.at(it).at(innerIt) = stod (line.substr (previousDelim + 1, thisDelim));
-                    innerIt++;
-                }
-                previousDelim = thisDelim;
-            }
-            it++;
-            previousDelim = -1;
-            thisDelim = 0;
+            elementFile.open(address);
+            if ( !elementFile.is_open() )
+                throw runtime_error("\nThe address is passed wrong to private 'Matrix::openFile_(string address, char delim)' function.\n");
         }
     }
-
-    else
+    catch (exception & address)
     {
-        cout<<"Can not open the file!!\n";
-        return;
+        cout << "\nInternal error: The address is not passed right.\n";
+        throw ;
+    }
+    size_t previousDelim = -1;
+    size_t thisDelim = 0;
+    string line = "";
+    int it = 0;
+    while (getline (elementFile, line) && line != "")
+    {
+        int innerIt = 0;
+        while (line.find (delim, thisDelim + 1))
+        {
+            thisDelim = line.find(delim, thisDelim + 1);
+            if (thisDelim == string::npos)
+            {
+                thisDelim = line.find('\n');
+                if (line [previousDelim + 1] == '-')
+                    this->matrix_.at(it).at(innerIt) = -stod (line.substr (previousDelim + 2, thisDelim));
+                else
+                    this->matrix_.at(it).at(innerIt) = stod (line.substr (previousDelim + 1, thisDelim - 1));
+                break;
+            }
+            if (line[previousDelim + 1] == '-')
+            {
+                this->matrix_.at(it).at(innerIt) = -stod (line.substr (previousDelim + 2, thisDelim));
+                innerIt++;
+            }
+            else {
+                this->matrix_.at(it).at(innerIt) = stod (line.substr (previousDelim + 1, thisDelim));
+                innerIt++;
+            }
+            previousDelim = thisDelim;
+        }
+        it++;
+        previousDelim = -1;
+        thisDelim = 0;
     }
 }
 //------------------------Saving Matrix To TextFile----------------------------------
-void Matrix::save(string name)
+void Matrix::save(string name , char delim)
 {
     ofstream outputFile (name);
     for (int it = 0; it < this->row_; it++)
@@ -255,7 +330,7 @@ void Matrix::save(string name)
             if (innerIt == this->column_ -1)
                 outputFile << this->matrix_.at(it).at(innerIt);
             else
-                outputFile << this->matrix_.at(it).at(innerIt) << ",";
+                outputFile << this->matrix_.at(it).at(innerIt) << delim ;
         }
         outputFile << '\n';
     }
@@ -269,8 +344,8 @@ int Matrix::getRow()
 int Matrix::getColumn()
 {
     return this->column_;
-}//------------------- matrixSize-------------------------------------
-string Matrix::size()
+}//------------------- show matrixSize-------------------------------------
+string Matrix::showSize()
 {
     string size = "";
     size = to_string(this->row_) + " , " + to_string(this->column_);
@@ -300,16 +375,21 @@ void Matrix::adjoint_(Matrix &adjoint)
 Matrix Matrix::inverse()
 {
     double determ = this->determinant_(this->column_);
-    if (determ == 0)
-        cout << "Singular matrix, can't find its inverse";
-    else
+    try
     {
-        Matrix inverse(this->row_, this->column_);
-        Matrix adjoint(this->row_, this->column_);
-        this->adjoint_ (adjoint);
-        for (int it = 0; it < this->row_; it++)
-            for (int innerIt = 0; innerIt < this->column_; innerIt++)
-                inverse.matrix_.at(it).at(innerIt) = adjoint.matrix_.at(it).at(innerIt) / int(determ);
-        return inverse;
+        if (determ != 0)
+            throw logic_error ("\nSingular matrix, can't find its inverse.\n");
     }
+    catch (exception & logicError)
+    {
+        cout << "\nAn logic error thrown.\n";
+        throw ;
+    }
+    Matrix inverse(this->row_, this->column_);
+    Matrix adjoint(this->row_, this->column_);
+    this->adjoint_ (adjoint);
+    for (int it = 0; it < this->row_; it++)
+        for (int innerIt = 0; innerIt < this->column_; innerIt++)
+            inverse.matrix_.at(it).at(innerIt) = adjoint.matrix_.at(it).at(innerIt) / int(determ);
+    return inverse;
 }

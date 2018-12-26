@@ -21,19 +21,20 @@ private:
 
     //-----------Methods
     void getCofactor_(Matrix matrix1, Matrix &tempMatrix, int p, int q, int n);
-    void openFile_ (string address);
+    void openFile_ (string address, char delim);
     double determinant_ (int n);
     void adjoint_ (Matrix &adjoint);
 
 public:
     //----------Constructor
-    Matrix (string address);
+    Matrix (string address , char delim);
     Matrix (int row, int column);
     //---------Friends Methods-----------
     friend istream &operator >> (istream &in , Matrix &matrix1);
     friend  Matrix operator * (int const coefficient, Matrix const matrix) ;
     //--------Public Methods------------------
-    void output();
+    void show(char delim);
+    void show();
     Matrix operator + (Matrix const &matrix);
     Matrix operator - (Matrix const matrix);
     Matrix operator * (int const coefficient);
@@ -41,10 +42,10 @@ public:
     bool operator == (Matrix const matrix);
     Matrix transpose();
     double determinant ();
-    void save (string name);
+    void save (string name, char delim);
     int getRow();
     int getColumn();
-    string size();
+    string showSize();
     Matrix inverse();
 };
 
