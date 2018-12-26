@@ -67,7 +67,7 @@ Matrix::Matrix (string address, char delim)
     this->openFile_(address, delim);
     matrixfile.close();
 }
-//------------------------------Overloading CIN---------------------------------
+//------------------------------Overloading >> ---------------------------------
 istream& operator >> (istream &in, Matrix &matrix1)
 {
     for(int it = 0 ; it < matrix1.row_ ; it++)
@@ -75,6 +75,21 @@ istream& operator >> (istream &in, Matrix &matrix1)
         cout<< it+1 <<"  row:\n" ;
         for ( int innerIt = 0 ; innerIt < matrix1.column_ ; innerIt++ )
             in >> matrix1.matrix_.at(it).at(innerIt);
+    }
+}
+//------------------------------Overloading << --------------------------------
+ostream &operator << (ostream &out , const Matrix &matrix1)
+{
+    for (int it = 0; it < matrix1.row_; it++)
+    {
+        for (int innerIt = 0; innerIt < matrix1.column_; innerIt++)
+        {
+            if (innerIt == matrix1.column_ -1)
+                out << matrix1.matrix_.at(it).at(innerIt);
+            else
+                out << matrix1.matrix_.at(it).at(innerIt) << '\t';
+        }
+        out << '\n';
     }
 }
 //------------------------------show the this->matrix WITH delim---------------------------

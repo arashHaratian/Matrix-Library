@@ -31,6 +31,7 @@ public:
     Matrix (int row, int column);
     //---------Friends Methods-----------
     friend istream &operator >> (istream &in , Matrix &matrix1);
+    friend ostream &operator << (ostream &out , const Matrix &matrix1);
     friend  Matrix operator * (int const coefficient, Matrix const matrix) ;
     //--------Public Methods------------------
     void show(char delim);
