@@ -10,24 +10,10 @@ using namespace std;
 //------------------------------Public Matrix(row,column) Constructor----------------
 Matrix::Matrix (int row, int column) : matrix_( vector<vector<double >>(row,vector<double >(column)) )
 {
-    try {
-        if (row <= 0)
-            throw invalid_argument("\nERROR! Your matrix 'row' must be bigger than 0.\n");
-    }
-    catch(exception& row)
-    {
-        cout<< "\nAn exception thrown.\n";
-        throw ;
-    }
-    try {
-        if (column  <= 0)
-            throw invalid_argument("\nERROR! Your matrix 'column' must be bigger than 0.\n");
-    }
-    catch(exception& column)
-    {
-        cout<< "\nAn exception thrown.\n";
-        throw ;
-    }
+    if (row <= 0)
+        throw invalid_argument("\nERROR! Your matrix 'row' must be bigger than 0.\n");
+    if (column  <= 0)
+        throw invalid_argument("\nERROR! Your matrix 'column' must be bigger than 0.\n");
     this->column_=column;
     this->row_=row;
 }
@@ -36,16 +22,8 @@ Matrix::Matrix (string address, char delim)
 {
     ifstream matrixfile;
     matrixfile.open (address);
-    try {
-        if ( !matrixfile.is_open() )
-            throw runtime_error("\nCould not open file.\n");
-    }
-    catch (exception & file)
-    {
-        cout << "\nYour address or txt file name is wrong.\n";
-        throw ;
-    }
-
+    if ( !matrixfile.is_open() )
+        throw runtime_error("\nYour address or txt file name is wrong.Could not open file.\n");
     this->row_ = this->column_ = 0;
     size_t thisDelim = 0;
     string line = "";
@@ -125,16 +103,8 @@ void Matrix::show()
 //---------------------------Overloading SUM------------------------
 Matrix Matrix::operator+ (Matrix const &matrix)
 {
-    try
-    {
-        if (this->column_ != matrix.column_ || this->row_ != matrix.row_)
-            throw logic_error("\nSummation error: These matrices are not in a same shape.\n");
-    }
-    catch(exception & logicError)
-    {
-        cout<<"\nAn logic error thrown.\n";
-        throw ;
-    }
+    if (this->column_ != matrix.column_ || this->row_ != matrix.row_)
+        throw logic_error("\nSummation error: These matrices are not in a same shape.\n");
 
     Matrix totalMartix (this->row_, this->column_);
     for (int it = 0; it < this->row_; it++)
@@ -146,16 +116,8 @@ Matrix Matrix::operator+ (Matrix const &matrix)
 //-------------------------Overloading Multiply With Another Matrix -----------------------
 Matrix Matrix::operator * (Matrix const &matrix)
 {
-    try
-    {
-        if (this->column_ != matrix.row_)
-            throw logic_error("\nMultiplication error: Column of first matrix is not equal to row of second matrix.\n");
-    }
-    catch (exception & logicError)
-    {
-        cout << "\nAn logic error thrown.\n";
-        throw ;
-    }
+    if (this->column_ != matrix.row_)
+        throw logic_error("\nMultiplication error: Column of first matrix is not equal to row of second matrix.\n");
     Matrix productMatrix(this->row_, matrix.column_);
     for (int it = 0; it < this->row_; it++)
         for(int firstInnerIt = 0; firstInnerIt < matrix.column_; firstInnerIt++)
@@ -164,7 +126,6 @@ Matrix Matrix::operator * (Matrix const &matrix)
                 productMatrix.matrix_.at(it).at(firstInnerIt) += this->matrix_.at(it).at(secondInnerIt) * matrix.matrix_.at(secondInnerIt).at(firstInnerIt);
             }
     return productMatrix;
-
 }
 //-------------------------Overloading Multiply With Number----------------------
 Matrix Matrix::operator * (int const coefficient)
@@ -187,16 +148,9 @@ Matrix operator * (int const coefficient, Matrix const matrix)
 //----------------------------Overloading Minus----------------------
 Matrix Matrix::operator - (Matrix const matrix)
 {
-    try
-    {
-        if (this->column_ != matrix.column_ || this->row_ != matrix.row_)
-            throw logic_error("\nSubtraction error: These matrices are not in a same shape.\n");
-    }
-    catch(exception & logicError)
-    {
-        cout<<"\nAn logic error thrown.\n";
-        throw ;
-    }
+    if (this->column_ != matrix.column_ || this->row_ != matrix.row_)
+        throw logic_error("\nSubtraction error: These matrices are not in a same shape.\n");
+
     Matrix minusMatrix (this->row_, this->column_);
     for (int it = 0; it < this->row_; it++)
         for (int innerIt = 0; innerIt < this->column_; innerIt++)
@@ -268,16 +222,8 @@ double Matrix::determinant_ (int n)
 //-------------------Public determinant------------------------------------
 double Matrix::determinant()
 {
-    try
-    {
-        if (this->row_ != this->column_)
-            throw logic_error("\nDeterminants are only used for square matrices.\n");
-    }
-    catch(exception & logicError)
-    {
-        cout << "\nAn logic error thrown.\n";
-        throw ;
-    }
+    if (this->row_ != this->column_)
+        throw logic_error("\nDeterminants are only used for square matrices.\n");
 
     return this->determinant_(this->row_);
 }
@@ -285,20 +231,13 @@ double Matrix::determinant()
 void Matrix::openFile_(string address, char delim)
 {
     ifstream elementFile (address);
-    try
+    if( !elementFile.is_open() )
     {
-        if( !elementFile.is_open() )
-        {
-            elementFile.open(address);
-            if ( !elementFile.is_open() )
-                throw runtime_error("\nThe address is passed wrong to private 'Matrix::openFile_(string address, char delim)' function.\n");
-        }
+        elementFile.open(address);
+        if ( !elementFile.is_open() )
+            throw runtime_error("\nInternal error: The address is not passed right to private 'Matrix::openFile_(string address, char delim)' function.\n");
     }
-    catch (exception & address)
-    {
-        cout << "\nInternal error: The address is not passed right.\n";
-        throw ;
-    }
+
     size_t previousDelim = -1;
     size_t thisDelim = 0;
     string line = "";
@@ -390,16 +329,9 @@ void Matrix::adjoint_(Matrix &adjoint)
 Matrix Matrix::inverse()
 {
     double determ = this->determinant_(this->column_);
-    try
-    {
-        if (determ != 0)
-            throw logic_error ("\nSingular matrix, can't find its inverse.\n");
-    }
-    catch (exception & logicError)
-    {
-        cout << "\nAn logic error thrown.\n";
-        throw ;
-    }
+    if (determ != 0)
+        throw logic_error ("\nSingular matrix, can't find its inverse.\n");
+
     Matrix inverse(this->row_, this->column_);
     Matrix adjoint(this->row_, this->column_);
     this->adjoint_ (adjoint);
