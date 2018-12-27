@@ -12,20 +12,20 @@ Matrix::Matrix (int row, int column) : matrix_( vector<vector<double >>(row,vect
 {
     try {
         if (row <= 0)
-            throw bad_alloc();
+            throw invalid_argument("\nERROR! Your matrix 'row' must be bigger than 0.\n");
     }
-    catch(bad_alloc& row)
+    catch(exception& row)
     {
-        cout<<"\nERROR! Your matrix 'row' must be bigger than 0.\n";
+        cout<< "\nAn exception thrown.\n";
         throw ;
     }
     try {
         if (column  <= 0)
-            throw bad_alloc();
+            throw invalid_argument("\nERROR! Your matrix 'column' must be bigger than 0.\n");
     }
-    catch(bad_alloc& column)
+    catch(exception& column)
     {
-        cout<<"\nERROR! Your matrix 'column' must be bigger than 0.\n";
+        cout<< "\nAn exception thrown.\n";
         throw ;
     }
     this->column_=column;
