@@ -47,40 +47,40 @@ int main()
     cout<< "your matrix is:\n" << matrix1;   // print the matrix1
     return 0;
 ```
-The functions you can use is:
+### The functions you can use is:
 
-**[Matrix (string address , char delim)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L30) :**
-	This **constructor** will take the address of your matrix text file and then make a that matrix.
-**[Matrix (int row, int column)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L31) :**
-	This **constructor** will get row and column of your matirx and make that matrix.
-**[friend istream &operator >> (istream &in , Matrix &matrix1)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L33) :**
-	Overloading ">>" to **take** elements of matrix from input.
-**[friend ostream &operator << (ostream &out , const Matrix &matrix1)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L34) :**
-	Overloading "<<" to **print** the matrix.
-**[friend Matrix operator * (int const coefficient, Matrix const matrix)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L35)** and **[Matrix operator * (int const coefficient)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L41) :**
-	These funtions Multiply the matrix in the coefficient return a **"Matrix" object**.
-**[void show(char delim)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L37)** and **[void show()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L38) :**
-	These function **print** the matrix **with/without a specific delimiter**.
-**[Matrix operator + (Matrix const &matrix)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L39) :**
-	This function sum the matrices return a **"Matrix" object**.
-**[Matrix operator - (Matrix const matrix)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L40) :**
-	This function subtract the matrices return a **"Matrix" object**.
-**[Matrix operator * (Matrix const &matrix)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L42) :**
-	This function multiply the matrices and return a **"Matrix" object**.
-**[bool operator == (Matrix const matrix)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L43) :**
-	This function compares matrices and return a **"bool" value**.
-**[Matrix transpose()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L44) :**
-	This function transpose the matrices and return a **"Matrix" object**.
-**[double determinant ()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L45) :**
-	This function compute the determinant of the matrices and return a **"double" value**.
-**[void save (string name, char delim)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L46) :**
-	This function save the matrices in a **textfile** with a specific delimiter.
-**[int getRow()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L47)** and **[int getColumn()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L48) :**
-	These functions show the **row/column** of matrices and return a **"int" value**.
-**[string showSize()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L49) :**
-	This function return a **"string"** that show the row and column of matrices.
-**[Matrix inverse()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L50) :**
-	This function compute the inverse of the matrices and return a **"Matrix" object**.
+#### **[Matrix (string address , char delim)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L30) :**
+This **constructor** will take the address of your matrix text file and then make a that matrix.
+#### **[Matrix (int row, int column)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L31) :**
+This **constructor** will get row and column of your matirx and make that matrix.
+#### **[friend istream &operator >> (istream &in , Matrix &matrix1)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L33) :**
+Overloading ">>" to **take** elements of matrix from input.
+#### **[friend ostream &operator << (ostream &out , const Matrix &matrix1)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L34) :**
+Overloading "<<" to **print** the matrix.
+#### **[friend Matrix operator * (int const coefficient, Matrix const matrix)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L35)** and **[Matrix operator * (int const coefficient)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L41) :**
+These funtions Multiply the matrix in the coefficient return a **"Matrix" object**.
+#### **[void show(char delim)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L37)** and **[void show()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L38) :**
+These function **print** the matrix **with/without a specific delimiter**.
+#### **[Matrix operator + (Matrix const &matrix)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L39) :**
+This function sum the matrices return a **"Matrix" object**.
+#### **[Matrix operator - (Matrix const matrix)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L40) :**
+This function subtract the matrices return a **"Matrix" object**.
+#### **[Matrix operator * (Matrix const &matrix)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L42) :**
+This function multiply the matrices and return a **"Matrix" object**.
+#### **[bool operator == (Matrix const matrix)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L43) :**
+This function compares matrices and return a **"bool" value**.
+#### **[Matrix transpose()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L44) :**
+This function transpose the matrices and return a **"Matrix" object**.
+#### **[double determinant ()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L45) :**
+This function compute the determinant of the matrices and return a **"double" value**.
+#### **[void save (string name, char delim)](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L46) :**
+This function save the matrices in a **textfile** with a specific delimiter.
+#### **[int getRow()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L47)** and **[int getColumn()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L48) :**
+These functions show the **row/column** of matrices and return a **"int" value**.
+#### **[string showSize()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L49) :**
+This function return a **"string"** that show the row and column of matrices.
+#### **[Matrix inverse()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L50) :**
+This function compute the inverse of the matrices and return a **"Matrix" object**.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
