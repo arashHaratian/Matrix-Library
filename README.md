@@ -46,6 +46,7 @@ int main()
     cin >> matrix1;                          //Get the elements of matrix from user
     cout << "your matrix is:\n" << matrix1;   // print the matrix1
     return 0;
+}
 ```
 ### The functions you can use are:
 
