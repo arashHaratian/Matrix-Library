@@ -83,10 +83,5 @@ This function return a **"string"** that show the row and column of matrices.
 #### **[Matrix inverse()](https://github.com/arashHaratian/Matrix-library/blob/f5c10c4564e77546e6f0b6ca1f481a06a239a035/matrixLib.h#L50) :**
 This function compute the inverse of the matrices and return a **"Matrix" object**.
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](LICENSE.md)
